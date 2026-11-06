@@ -1,6 +1,19 @@
+# Secretos: nunca se suben (solo .env.example, que lleva valores ficticios)
 .env
 .env.*
+*.env
 !.env.example
+
+# Entorno virtual y caches de Python
 .venv/
+venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# Editores y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

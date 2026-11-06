@@ -1,0 +1,52 @@
+{"id": "b01", "ticket": "Me llegó el cobro de la suscripción dos veces este mes, quiero que me devuelvan uno de los cargos.", "category": "billing", "tipo": "claro", "split": "dev"}
+{"id": "b02", "ticket": "Necesito la factura de septiembre para mi contador, no me llegó al mail.", "category": "billing", "tipo": "claro", "split": "dev"}
+{"id": "b03", "ticket": "¿Por qué me cobraron 45 USD si mi plan es el de 30? Revisen por favor.", "category": "billing", "tipo": "claro", "split": "dev"}
+{"id": "b04", "ticket": "hola q tal, me debitaron de la tarjeta el plan anual y yo no lo habia pedido!! quiero reembolso", "category": "billing", "tipo": "ruidoso", "split": "dev"}
+{"id": "b05", "ticket": "Quiero cambiar la razón social y el número fiscal que figuran en mis facturas.", "category": "billing", "tipo": "ambiguo", "split": "dev"}
+{"id": "b06", "ticket": "¿Cuándo vence mi próximo pago y de cuánto va a ser?", "category": "billing", "tipo": "claro", "split": "dev"}
+{"id": "b07", "ticket": "Mi tarjeta fue rechazada al renovar y ahora me figura saldo pendiente, ¿cómo lo regularizo?", "category": "billing", "tipo": "claro", "split": "dev"}
+{"id": "b08", "ticket": "Ya pagué pero el sistema sigue diciendo que mi cuenta está suspendida por falta de pago.", "category": "billing", "tipo": "ambiguo", "split": "dev"}
+{"id": "t01", "ticket": "El dashboard de reportes me da error 500 desde esta mañana, no puedo sacar el cierre del mes.", "category": "technical", "tipo": "claro", "split": "dev"}
+{"id": "t02", "ticket": "Se cayó la sincronización con Mercado Pago, no están entrando los pagos desde ayer.", "category": "technical", "tipo": "claro", "split": "dev"}
+{"id": "t03", "ticket": "La app del celular se cierra sola apenas la abro, tengo Android.", "category": "technical", "tipo": "claro", "split": "dev"}
+{"id": "t04", "ticket": "Los reportes tardan más de 5 minutos en cargar, antes era instantáneo.", "category": "technical", "tipo": "claro", "split": "dev"}
+{"id": "t05", "ticket": "no anda nada!!! pantalla en blanco no carga el sistema", "category": "technical", "tipo": "ruidoso", "split": "dev"}
+{"id": "t06", "ticket": "Subí el Excel de productos y me dice 'formato inválido', pero es el mismo archivo que uso siempre.", "category": "technical", "tipo": "claro", "split": "dev"}
+{"id": "t07", "ticket": "La API me devuelve error 429 aunque casi no hago requests, ¿hay algún problema de su lado?", "category": "technical", "tipo": "claro", "split": "dev"}
+{"id": "t08", "ticket": "No puedo descargar la factura, me sale un error cuando hago clic en el botón.", "category": "technical", "tipo": "ambiguo", "split": "dev"}
+{"id": "a01", "ticket": "Quiero sumar a mi contadora como usuaria con acceso de solo lectura, ¿cómo lo hago?", "category": "account", "tipo": "claro", "split": "dev"}
+{"id": "a02", "ticket": "Necesito cambiar el email del administrador de la cuenta, el actual era de un empleado que ya no está.", "category": "account", "tipo": "claro", "split": "dev"}
+{"id": "a03", "ticket": "Me olvidé la contraseña y el mail para recuperarla no me llega.", "category": "account", "tipo": "ambiguo", "split": "dev"}
+{"id": "a04", "ticket": "¿Cómo doy de baja a un usuario que ya no trabaja con nosotros?", "category": "account", "tipo": "claro", "split": "dev"}
+{"id": "a05", "ticket": "Quiero cambiar el nombre de mi empresa que aparece en la cuenta.", "category": "account", "tipo": "claro", "split": "dev"}
+{"id": "a06", "ticket": "Quiero activar la verificación en dos pasos para todos los usuarios de mi equipo.", "category": "account", "tipo": "claro", "split": "dev"}
+{"id": "a07", "ticket": "hola, me bloquearon la cuenta despues de varios intentos de entrar, como la desbloqueo", "category": "account", "tipo": "ruidoso", "split": "dev"}
+{"id": "a08", "ticket": "Necesito pasar la titularidad de la cuenta a otra persona de mi equipo.", "category": "account", "tipo": "claro", "split": "dev"}
+{"id": "o01", "ticket": "¿Tienen algún descuento para clientes que llevan más de dos años con ustedes?", "category": "other", "tipo": "claro", "split": "dev"}
+{"id": "o02", "ticket": "Somos 120 empleados, ¿tienen algún plan pensado para empresas grandes?", "category": "other", "tipo": "claro", "split": "dev"}
+{"id": "o03", "ticket": "¿Ofrecen capacitaciones o webinars para aprender a usar el sistema?", "category": "other", "tipo": "claro", "split": "dev"}
+{"id": "o04", "ticket": "Quisiera coordinar una reunión con un ejecutivo comercial para ver el plan corporativo.", "category": "other", "tipo": "claro", "split": "dev"}
+{"id": "o05", "ticket": "¿Tienen oficinas o atención presencial en Bogotá?", "category": "other", "tipo": "claro", "split": "dev"}
+{"id": "o06", "ticket": "hola", "category": "other", "tipo": "ruidoso", "split": "dev"}
+{"id": "o07", "ticket": "¿Qué tiempo va a hacer mañana en Santiago?", "category": "other", "tipo": "fuera_de_tema", "split": "dev"}
+{"id": "o08", "ticket": "Estoy pensando en cancelar el servicio porque me salió caro, ¿qué opciones tengo?", "category": "other", "tipo": "ambiguo", "split": "dev"}
+{"id": "h01", "ticket": "Me cobraron de más este mes y además la app se cierra cuando intento ver el detalle del cobro.", "category": "billing", "tipo": "mixto", "split": "holdout"}
+{"id": "h02", "ticket": "Cambié de celular y ahora no me deja entrar a la app, ¿me pueden resetear el acceso? Ah, y necesito la factura de octubre.", "category": "account", "tipo": "mixto", "split": "holdout"}
+{"id": "h03", "ticket": "Quiero dar de alta un usuario nuevo pero el botón de 'agregar' no hace nada.", "category": "technical", "tipo": "ambiguo", "split": "holdout"}
+{"id": "h04", "ticket": "El sistema me cobró el plan pero mi cuenta sigue en la versión gratuita.", "category": "billing", "tipo": "ambiguo", "split": "holdout"}
+{"id": "h05", "ticket": "Buen día, les escribo porque hace unas semanas vengo con problemas. Primero pensé que era mi internet, pero lo probé en otras computadoras y pasa lo mismo: cuando quiero exportar el reporte de ventas a PDF se queda trabado y después da error. Ya probé con otro navegador. Mi contador necesita ese reporte todos los meses, así que si pueden revisarlo se los agradezco mucho. Saludos.", "category": "technical", "tipo": "largo", "split": "holdout"}
+{"id": "h06", "ticket": "Hola, soy dueño de una ferretería con 3 sucursales. En el último mes me aparecen dos movimientos de pago con el mismo monto, el día 5 y el día 6, y mi banco me confirma que se debitaron los dos. No sé si es un error o si corresponde a algo que no entiendo, pero quisiera que me expliquen o me devuelvan lo que corresponda.", "category": "billing", "tipo": "largo", "split": "holdout"}
+{"id": "h07", "ticket": "no me funciona", "category": "technical", "tipo": "sin_contexto", "split": "holdout"}
+{"id": "h08", "ticket": "necesito ayuda con mi cuenta", "category": "account", "tipo": "sin_contexto", "split": "holdout"}
+{"id": "h09", "ticket": "tengo una consulta", "category": "other", "tipo": "sin_contexto", "split": "holdout"}
+{"id": "h10", "ticket": "Mi contador me pide un comprobante de todo lo que pagué en el año, ¿de dónde lo saco?", "category": "billing", "tipo": "indirecto", "split": "holdout"}
+{"id": "h11", "ticket": "Mi empleado nuevo empieza el lunes y necesita poder cargar ventas pero no ver los costos.", "category": "account", "tipo": "indirecto", "split": "holdout"}
+{"id": "h12", "ticket": "Voy a abrir dos sucursales más, ¿esto cambia lo que pago?", "category": "other", "tipo": "ambiguo", "split": "holdout"}
+{"id": "h13", "ticket": "Desde ayer los clientes me dicen que el código QR del ticket no se escanea.", "category": "technical", "tipo": "indirecto", "split": "holdout"}
+{"id": "h14", "ticket": "NO PUEDO ENTRAR!!! me dice contraseña incorrecta y ya la cambié 3 veces", "category": "account", "tipo": "ruidoso", "split": "holdout"}
+{"id": "h15", "ticket": "x favor la factura q me llego dice monto equivocado, el plan q tengo es el basico no el pro", "category": "billing", "tipo": "ruidoso", "split": "holdout"}
+{"id": "h16", "ticket": "¿Puedo pasar mi cuenta de Argentina a México o tengo que abrir una nueva?", "category": "account", "tipo": "ambiguo", "split": "holdout"}
+{"id": "h17", "ticket": "Quiero dejar una sugerencia: sería buenísimo que pudieran agregar un modo oscuro.", "category": "other", "tipo": "claro", "split": "holdout"}
+{"id": "h18", "ticket": "Me quedé sin trabajo y ya no voy a usar el sistema, ¿cómo doy de baja todo?", "category": "other", "tipo": "ambiguo", "split": "holdout"}
+{"id": "h19", "ticket": "¿Por qué el sistema me dice 'sesión expirada' cada 5 minutos?", "category": "technical", "tipo": "ambiguo", "split": "holdout"}
+{"id": "h20", "ticket": "Tuve un problema con un proveedor de insumos, ¿ustedes pueden ayudarme a reclamarle?", "category": "other", "tipo": "fuera_de_tema", "split": "holdout"}

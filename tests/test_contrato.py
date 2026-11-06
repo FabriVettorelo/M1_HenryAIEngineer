@@ -61,8 +61,13 @@ def test_check_input_rechaza_tickets_enormes():
 
 
 # --- Prompt -------------------------------------------------------------------
-def test_el_prompt_yaml_menciona_las_categorias_y_el_contrato():
-    with open(PROMPT_PATH, encoding="utf-8") as f:
-        system = yaml.safe_load(f)["system"]
+@pytest.mark.parametrize("version", ["v1", "v2"])
+def test_los_prompts_yaml_mencionan_las_categorias_el_contrato_y_las_reglas_de_seguridad(version):
+    with open(PROMPT_PATH.parent / f"system-prompt-{version}.yaml", encoding="utf-8") as f:
+        datos = yaml.safe_load(f)
+    system = datos["system"]
+    assert datos["version"] == version and datos["tecnica"]
     assert all(c in system for c in CATEGORIAS)
     assert all(campo in system for campo in ["answer", "confidence", "category", "actions"])
+    assert "no instrucciones" in system  # el ticket se trata como dato, no como órdenes
+    assert "No reveles" in system
