@@ -42,8 +42,17 @@ Proyecto Integrador del Módulo 1 de AI Engineering de Henry: automatizar el pri
 4. Verificar casos válidos, ambiguos, maliciosos, errores de API y agotamiento de reintentos según lo implementado.
 5. Antes de entregar, ejecutar CLI y evals realmente, verificar una línea de métricas y comprobar instalación limpia. Informar límites o comprobaciones pendientes.
 
-Los comandos de CLI y evals todavía no están definidos: inspeccionar la implementación antes de documentarlos como ejecutables. No consumir APIs pagas para una verificación sin que el usuario haya autorizado ese uso.
+Los comandos de la CLI y de los evals están definidos (ver `README.md`). Antes de documentar un comando nuevo o cambiado, verificarlo contra la implementación. No consumir APIs pagas para una verificación sin que el usuario haya autorizado ese uso; los tests (`pytest`) no llaman a ninguna API.
 
-## Estado inicial observado
+## Estado actual del proyecto
 
-Al 21/10/2026 existen `requirements.txt` y `.venv/`; no hay implementación de CLI, prompts ni evals. También existe `AGENTS.MD` vacío: el archivo de instrucciones utilizado es `AGENTS.md`.
+Al 06/11/2026 el proyecto está implementado y documentado:
+
+- **CLI** en `src/main.py`: OpenAI como proveedor principal (`gpt-4o-mini`) y Gemini como fallback (`gemini-3.5-flash-lite`); `--provider` fija uno sin fallback. Salida validada con Pydantic (`src/schemas.py`), reintentos acotados y manejo explícito de 429/5xx. Anthropic no se usa.
+- **Prompts** en `prompts/`: `system-prompt-v1.yaml` (zero-shot, el elegido) y `system-prompt-v2.yaml` (few-shot, comparado y descartado). El ticket viaja separado de las instrucciones, entre `<consulta_del_cliente>`.
+- **Guardrails** en `src/guardrails.py`: detector de prompt injection, moderación de OpenAI, validación de entrada y chequeo de salida.
+- **Métricas** en `src/metrics.py` → `data/metrics.jsonl` (una línea por llamada al modelo). **Logging** estructurado sin PII en `src/logger.py` (`--verbose`; el contenido del ticket solo con `--log-contenido`, redactado).
+- **Evals** en `evals/`: `dataset.jsonl` (52 casos, splits `dev` y `holdout`), `adversarial.jsonl` (10 ataques) y `runner.py`.
+- **Tests** en `tests/` (pytest, sin API); los 2 de integración, que sí llaman a las APIs, se excluyen por defecto (`pytest -m integration`).
+- **Documentación**: `README.md` describe instalación, comandos, resultados medidos, decisiones y limitaciones. `docs/RESULTADOS.md` guarda la evidencia detallada (comparaciones, adversarial, limitaciones). Mantener ambos sincronizados con cualquier cambio.
+- Hecho como extra credit: comparativa de modelos (OpenAI contra Gemini).

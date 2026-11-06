@@ -15,6 +15,16 @@ def metricas_temporales(tmp_path, monkeypatch):
 
 
 @pytest.fixture(autouse=True)
+def logging_apagado():
+    """El logger guarda estado global: cada test arranca con él apagado y lo deja apagado."""
+    from src import logger
+
+    logger.configure(enabled=False)
+    yield
+    logger.configure(enabled=False)
+
+
+@pytest.fixture(autouse=True)
 def sin_esperas(monkeypatch):
     """Los reintentos con espera no deben hacer dormir a los tests."""
     monkeypatch.setattr("src.main.time.sleep", lambda segundos: None)

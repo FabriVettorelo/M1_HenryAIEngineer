@@ -15,7 +15,9 @@ from src.clients.gemini_client import create_gemini_client
 from src.clients.openai_client import create_openai_client
 from src.errors import ConsultaInvalidaError, ContratoInvalidoError, ProveedoresNoDisponiblesError
 from src.guardrails import check_input, check_output, detect_injection, moderate, safe_result, wrap_ticket
-from src.metrics import log_request
+from src.logger import configure as configure_logging
+from src.logger import log_event, start_request
+from src.metrics import estimate_cost, log_request
 from src.schemas import LLMResponse, TicketResult
 
 load_dotenv()  # carga las variables del .env en el entorno
@@ -104,7 +106,13 @@ def call_and_log(provider: str, model: str, call, system_prompt: str, ticket: st
     """Ejecuta la llamada al proveedor, mide la latencia, registra la métrica y devuelve el texto."""
     start = time.perf_counter()
     response = call(system_prompt, ticket)
-    log_request(provider, model, response, time.perf_counter() - start)
+    latency = time.perf_counter() - start
+    log_request(provider, model, response, latency)
+    log_event(
+        "llamada_modelo", provider=provider, model=model, ok=True, latency_s=round(latency, 3),
+        prompt_tokens=response.prompt_tokens, completion_tokens=response.completion_tokens,
+        cost_usd=estimate_cost(model, response.prompt_tokens, response.completion_tokens),
+    )
     return response.text
 
 
@@ -152,6 +160,7 @@ def call_with_retries(name: str, model: str, call, system_prompt: str, ticket: s
             if attempt == max_retries or not is_transient(error):
                 raise
             wait = RETRY_BASE_WAIT_S * 2**attempt
+            log_event("reintento", provider=name, attempt=attempt + 1, wait_s=wait, error=describe_error(error))
             print(f"[aviso] {name}: {describe_error(error)}; reintento {attempt + 1}/{max_retries} en {wait:g} s", file=sys.stderr)
             time.sleep(wait)
 
@@ -166,6 +175,7 @@ def classify_ticket(system_prompt: str, ticket: str, provider: str | None = None
             return name, call_with_retries(name, model, call, system_prompt, ticket)
         except recoverable_errors as error:
             last_error = error
+            log_event("llamada_modelo", provider=name, model=model, ok=False, error=describe_error(error))
             if position + 1 < len(order):
                 print(f"[aviso] {name} falló ({describe_error(error)}); usando {order[position + 1]}", file=sys.stderr)
     raise ProveedoresNoDisponiblesError(f"Falló {' y '.join(order)} (último error: {describe_error(last_error)}).") from last_error
@@ -187,25 +197,46 @@ def classify_and_validate(
 
     Con guardrails=True, un ticket sospechoso no llega al modelo y una respuesta insegura se reemplaza por una
     respuesta segura; en ambos casos el proveedor devuelto es 'guardrail-entrada' o 'guardrail-salida'."""
-    ticket = check_input(ticket)  # antes de gastar una llamada al modelo
+    start_request()  # un id por ticket para seguirlo en los logs
+    try:
+        ticket = check_input(ticket)  # antes de gastar una llamada al modelo
+    except ConsultaInvalidaError as error:
+        log_event("entrada", ok=False, error=str(error))
+        raise
+    log_event("entrada", ok=True, chars=len(ticket))
+
     if guardrails:
-        reason = detect_injection(ticket) or moderate(ticket)
+        reason = detect_injection(ticket)
+        log_event("injection", flagged=reason is not None, reason=reason or "limpio")
+        reason = reason or moderate(ticket)  # la moderación registra su propio evento
         if reason:
             print(f"[aviso] guardrail de entrada: {reason}", file=sys.stderr)
+            log_event("resultado", provider="guardrail-entrada", bloqueado=True, category="other")
             return "guardrail-entrada", safe_result(reason)
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        used_provider, raw = classify_ticket(system_prompt, ticket, provider)
+        try:
+            used_provider, raw = classify_ticket(system_prompt, ticket, provider)
+        except ProveedoresNoDisponiblesError as error:
+            log_event("resultado", ok=False, error=str(error))
+            raise
         try:
             result = parse_result(raw)
         except ValidationError as error:
             print(f"[aviso] intento {attempt}/{MAX_ATTEMPTS}: respuesta inválida ({error.error_count()} errores)", file=sys.stderr)
+            log_event("validacion", attempt=attempt, ok=False, error=f"{error.error_count()} errores de validación")
             continue
+        log_event("validacion", attempt=attempt, ok=True)
         reason = check_output(result) if guardrails else None
+        if guardrails:
+            log_event("salida", flagged=reason is not None, reason=reason or "limpio")
         if reason:
             print(f"[aviso] guardrail de salida: {reason}", file=sys.stderr)
+            log_event("resultado", provider="guardrail-salida", bloqueado=True, category="other")
             return "guardrail-salida", safe_result(reason)
+        log_event("resultado", provider=used_provider, bloqueado=False, category=result.category, confidence=result.confidence)
         return used_provider, result
+    log_event("resultado", ok=False, error=f"respuesta inválida tras {MAX_ATTEMPTS} intentos")
     raise ContratoInvalidoError(f"No se obtuvo una respuesta válida tras {MAX_ATTEMPTS} intentos.")
 
 
@@ -215,7 +246,10 @@ def main(args: list[str]) -> int:
     parser.add_argument("ticket", nargs="*", help="texto del ticket; sin texto usa el ticket de ejemplo (TICKET)")
     parser.add_argument("--provider", choices=PROVIDER_ORDER, help="fuerza un proveedor (sin fallback); por defecto openai con fallback a gemini")
     parser.add_argument("--prompt", type=Path, default=PROMPT_PATH, help="YAML con el system prompt a usar")
+    parser.add_argument("--verbose", action="store_true", help="imprime por stderr un log JSON por cada paso (sin contenido del ticket)")
+    parser.add_argument("--log-contenido", action="store_true", help="incluye en el log una vista previa del ticket, redactada y truncada (implica --verbose)")
     options = parser.parse_args(args)
+    configure_logging(enabled=options.verbose or options.log_contenido, include_content=options.log_contenido)
 
     # Para probar los 8 ejemplos, cambiar TICKET por TICKETS en la línea de abajo.
     tickets = [" ".join(options.ticket)] if options.ticket else TICKET

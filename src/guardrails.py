@@ -6,6 +6,7 @@ from openai import OpenAIError
 
 from src.clients.openai_client import create_openai_client
 from src.errors import ConsultaInvalidaError
+from src.logger import log_event
 from src.schemas import TicketResult
 
 MAX_TICKET_CHARS = 2000  # un ticket real es corto; un texto enorme es abuso o error y cuesta tokens
@@ -78,10 +79,13 @@ def moderate(ticket: str) -> str | None:
         resultado = create_openai_client().moderations.create(model=MODERATION_MODEL, input=ticket).results[0]
     except (OpenAIError, ValueError) as error:
         print(f"[aviso] moderación no disponible ({type(error).__name__}); se continúa sin ella", file=sys.stderr)
+        log_event("moderacion", content=ticket, flagged=False, reason="no evaluado", error=type(error).__name__)
         return None
     if not resultado.flagged:
+        log_event("moderacion", content=ticket, flagged=False, reason="limpio")
         return None
     categorias = [nombre for nombre, marcada in resultado.categories.model_dump().items() if marcada]
+    log_event("moderacion", content=ticket, flagged=True, reason=", ".join(categorias))
     return f"moderación ({', '.join(categorias)})"
 
 
