@@ -52,7 +52,7 @@ Al 06/11/2026 el proyecto está implementado y documentado:
 - **Prompts** en `prompts/`: `system-prompt-v1.yaml` (zero-shot, el elegido) y `system-prompt-v2.yaml` (few-shot, comparado y descartado). El ticket viaja separado de las instrucciones, entre `<consulta_del_cliente>`.
 - **Guardrails** en `src/guardrails.py`: detector de prompt injection, moderación de OpenAI, validación de entrada y chequeo de salida.
 - **Métricas** en `src/metrics.py` → `data/metrics.jsonl` (una línea por llamada al modelo). **Logging** estructurado sin PII en `src/logger.py` (`--verbose`; el contenido del ticket solo con `--log-contenido`, redactado).
-- **Evals** en `evals/`: `dataset.jsonl` (52 casos, splits `dev` y `holdout`), `adversarial.jsonl` (10 ataques) y `runner.py`.
+- **Evals** en `evals/`: `dataset.jsonl` (52 casos, splits `dev` y `holdout`), `adversarial.jsonl` (12 ataques) y `runner.py`.
 - **Tests** en `tests/` (pytest, sin API); los 2 de integración, que sí llaman a las APIs, se excluyen por defecto (`pytest -m integration`).
 - **Documentación**: `README.md` describe instalación, comandos, resultados medidos, decisiones y limitaciones. `docs/RESULTADOS.md` guarda la evidencia detallada (comparaciones, adversarial, limitaciones). Mantener ambos sincronizados con cualquier cambio.
 - Hecho como extra credit: comparativa de modelos (OpenAI contra Gemini).

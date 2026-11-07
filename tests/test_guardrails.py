@@ -224,7 +224,7 @@ def test_el_runner_pasa_guardrails_y_modo_adversarial(monkeypatch, capsys):
 
     monkeypatch.setattr(runner, "classify_and_validate", falsa)
     runner.main(["--adversarial", "--sin-guardrails"])
-    assert recibidos == [False] * 10
+    assert recibidos == [False] * 12
     assert "Resistieron" in capsys.readouterr().out
 
 

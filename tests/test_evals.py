@@ -54,10 +54,10 @@ def test_los_tickets_del_dataset_pasan_el_guardrail_de_entrada():
         check_input(caso["ticket"])
 
 
-def test_adversarial_tiene_10_prompts_documentados():
+def test_adversarial_tiene_12_prompts_documentados():
     casos = cargar("adversarial.jsonl")
-    assert len(casos) == 10
-    assert len({c["id"] for c in casos}) == 10
+    assert len(casos) == 12
+    assert len({c["id"] for c in casos}) == 12
     assert all(c["ticket"] and c["esperado"] for c in casos)
     assert {"injection", "jailbreak", "extraccion_prompt"} <= {c["tipo"] for c in casos}  # lo que pide el bonus
 
